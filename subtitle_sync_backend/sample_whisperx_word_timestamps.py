@@ -76,13 +76,18 @@ def main():
     # STEP 3: Print out word-level alignments
     print("\nWord-level alignments:\n-----------------------------")
     for word in word_segments:
-        text = word.get("text", "<unk>")
-        start = word.get("start", None)
-        end = word.get("end", None)
-        if start is not None and end is not None:
-            print(f"[{start:.2f}, {end:.2f}]   {text}")
+        # Handle both dict and string case for backward compatibility or unexpected outputs
+        if isinstance(word, dict):
+            text = word.get("text", "<unk>")
+            start = word.get("start", None)
+            end = word.get("end", None)
+            if start is not None and end is not None:
+                print(f"[{start:.2f}, {end:.2f}]   {text}")
+            else:
+                print(f"[??, ??]   {text}")
         else:
-            print(f"[??, ??]   {text}")
+            # If word is just a string
+            print(f"[??, ??]   {str(word)}")
     print("\nDone.")
 
 if __name__ == "__main__":
