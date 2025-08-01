@@ -53,6 +53,8 @@ except ImportError:
 # You may adjust these for other models/languages
 MODEL_SIZE = "base"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# Note: ALIGN_MODEL_PATH is not required when allowing WhisperX to choose the default,
+# but we keep it for reference in comments/documentation.
 ALIGN_MODEL_PATH = os.path.join(os.path.dirname(__file__), "align_0.1.pt")  # Relative to script location
 
 def main():
@@ -66,13 +68,30 @@ def main():
 
     print(f"Initial segment count: {len(segments)}")
 
-    # STEP 2: Align to get word-level timestamps with downloaded model if available
+    # STEP 2: Align to get word-level timestamps, allowing WhisperX to handle model loading location.
     print("(Loading align model...)")
-    # Print the alignment model path for transparency
-    print(f"Alignment model path being used: {ALIGN_MODEL_PATH}")
-    # Updated: Remove unsupported `model_fp` argument for compatibility with currently installed whisperx
-    # If you are using a non-standard path for the model, you must move or symlink it as required.
     align_model, metadata = whisperx.load_align_model(language_code="en", device=DEVICE)
+    # Attempt to print the model path in use, if available
+    align_model_path = None
+    # Try several likely locations in returned objects to print the model path, if exposed by the loaded object
+    if hasattr(align_model, "model_file"):
+        align_model_path = getattr(align_model, "model_file", None)
+    elif hasattr(align_model, "model_path"):
+        align_model_path = getattr(align_model, "model_path", None)
+    # Sometimes it's in a submodule or an attribute (for pyannote style torch models)
+    elif hasattr(align_model, "file"):
+        align_model_path = getattr(align_model, "file", None)
+    elif hasattr(align_model, "model") and hasattr(align_model.model, "file"):
+        align_model_path = getattr(align_model.model, "file", None)
+    # Some versions may set the path in the metadata dictionary
+    elif isinstance(metadata, dict) and "model_path" in metadata:
+        align_model_path = metadata["model_path"]
+    # Print the discovered model path
+    if align_model_path:
+        print(f"Actual alignment model file in use: {align_model_path}")
+    else:
+        print("Alignment model path info not available in align_model object; using WhisperX default.")
+
     word_segments = whisperx.align(segments, align_model, metadata, input_path, device=DEVICE, return_char_alignments=False)
     
     # STEP 3: Print out word-level alignments
