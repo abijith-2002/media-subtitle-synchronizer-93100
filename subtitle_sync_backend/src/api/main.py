@@ -8,7 +8,7 @@ import uuid
 
 from .models import FileUploadResponse, StatusResponse, SubtitlesResponse, SubtitleLine, ListFilesResponse
 from .db import save_file_processing_status, get_file_processing_status, save_subtitles, get_subtitles, list_uploaded_files
-from .whisperx_integration import run_whisperx_on_file
+from src.whisperx_integration import run_whisperx_on_file
 
 UPLOAD_DIR = os.environ.get("UPLOAD_DIR", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
