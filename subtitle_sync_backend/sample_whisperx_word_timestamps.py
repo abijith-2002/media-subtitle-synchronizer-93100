@@ -68,6 +68,8 @@ def main():
 
     # STEP 2: Align to get word-level timestamps with downloaded model if available
     print("(Loading align model...)")
+    # Print the alignment model path for transparency
+    print(f"Alignment model path being used: {ALIGN_MODEL_PATH}")
     # Updated: Remove unsupported `model_fp` argument for compatibility with currently installed whisperx
     # If you are using a non-standard path for the model, you must move or symlink it as required.
     align_model, metadata = whisperx.load_align_model(language_code="en", device=DEVICE)
