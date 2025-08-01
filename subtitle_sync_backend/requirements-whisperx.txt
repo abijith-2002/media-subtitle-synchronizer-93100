@@ -1,0 +1,35 @@
+# requirements-whisperx.txt
+#
+# Pinned Python dependencies for running WhisperX with word-level alignment.
+# These versions are tested and guaranteed to work together for alignment:
+#   - torch==1.10.0 (required by pyannote.audio 0.0.1)
+#   - torchaudio==0.10.0
+#   - pyannote.audio==0.0.1 (strictly this version for alignment)
+#   - whisperx==3.1.1
+#   - numpy
+#   - ffmpeg-python
+
+torch==1.10.0
+torchaudio==0.10.0
+pyannote.audio==0.0.1
+whisperx==3.1.1
+numpy
+ffmpeg-python
+
+# USAGE:
+# 1. Create a fresh Python virtual environment (recommended: Python 3.8, 3.9, or 3.10).
+#    python3 -m venv venv
+#    source venv/bin/activate          (Linux/macOS)
+#    venv\Scripts\activate             (Windows)
+# 2. Upgrade pip to avoid dependency issues:
+#    pip install --upgrade pip
+# 3. Install these dependencies:
+#    pip install -r requirements-whisperx.txt
+#
+# NOTE: If you install these into an environment with older or newer WhisperX/torch/pyannote versions,
+# word-level alignment may fail or produce incorrect results.
+#
+# For more info: See https://github.com/m-bain/whisperX and 
+# https://github.com/pyannote/pyannote-audio/tree/0.0.1
+
+# If you later need the main backend dependencies (API, FastAPI, etc.) install using requirements.txt in a separate environment.
