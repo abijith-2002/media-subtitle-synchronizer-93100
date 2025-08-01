@@ -69,7 +69,9 @@ def main():
     # STEP 2: Align to get word-level timestamps with downloaded model if available
     batch_size = 16  # adjust as needed
     print("(Loading align model...)")
-    align_model, metadata = whisperx.load_align_model(language_code="en", device=DEVICE, model_fp=ALIGN_MODEL_PATH if os.path.exists(ALIGN_MODEL_PATH) else None)
+    # Updated: Remove unsupported `model_fp` argument for compatibility with currently installed whisperx
+    # If you are using a non-standard path for the model, you must move or symlink it as required.
+    align_model, metadata = whisperx.load_align_model(language_code="en", device=DEVICE)
     word_segments = whisperx.align(segments, align_model, metadata, input_path, device=DEVICE, return_char_alignments=False, batch_size=batch_size)
     
     # STEP 3: Print out word-level alignments
