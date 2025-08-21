@@ -3,6 +3,11 @@ import os
 
 from src.api.main import app
 
+"""
+Generate the OpenAPI schema JSON for this service.
+Note: Theme switching is hinted via query/header in endpoints; the OpenAPI schema itself is static.
+"""
+
 # Get the OpenAPI schema
 openapi_schema = app.openapi()
 
